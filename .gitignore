@@ -1,2 +1,7 @@
 BACKEND/node_modules
 FRONTEND/node_modules
+
+# Archivos de variables de entorno y credenciales
+.env
+BACKEND/.env
+FRONTEND/.env

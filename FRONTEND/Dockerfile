@@ -21,8 +21,8 @@ ENV VITE_API_URL=${VITE_API_URL}
 # Construir la aplicación
 RUN npm run build
 
-# Etapa 2: Producción
-FROM nginx:alpine
+# Etapa 2: Producción (Uso de imagen unprivileged para evitar ejecución como root)
+FROM nginxinc/nginx-unprivileged:alpine
 
 # Copiar los archivos construidos desde la etapa de construcción
 COPY --from=builder /app/dist /usr/share/nginx/html
@@ -30,9 +30,8 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 # Copiar la configuración de nginx personalizada
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Exponer puerto 80
-EXPOSE 80
+# Exponer el puerto 8080 (las imágenes sin privilegios no pueden usar puertos < 1024 como el 80)
+EXPOSE 8080
 
 # Comando para iniciar nginx
 CMD ["nginx", "-g", "daemon off;"]
-

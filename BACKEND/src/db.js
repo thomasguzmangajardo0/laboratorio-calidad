@@ -1,10 +1,13 @@
 const { Pool } = require("pg");
 require("dotenv").config();
 
-const connectionString =
-  process.env.DATABASE_URL ||
-  "postgres://postgres:alone15@localhost:5432/cuidarteplus";
+// Si no existe DATABASE_URL en el .env, se lanza un error en lugar de exponer credenciales
+if (!process.env.DATABASE_URL) {
+  throw new Error("ERROR: La variable de entorno DATABASE_URL no está configurada en el archivo .env");
+}
 
-const pool = new Pool({ connectionString });
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL
+});
 
 module.exports = { pool };
